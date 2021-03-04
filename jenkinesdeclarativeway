@@ -1,0 +1,74 @@
+pipeline{
+
+agent any;
+
+tools{
+
+maven 'maven-3.6.3'
+
+}
+
+options{
+timestamps()
+
+}
+
+stages{
+
+    stage('checkoutcode'){
+	 steps{
+	  git branch: 'development', credentialsId: '64e585c2-3d00-449e-9aeb-b21dd192172b', url: 'https://github.com/priy37/maven-web-application.git'
+	 }
+	}
+	
+	stage('build'){
+	 steps{
+	 sh "mvn clean package"
+	 }
+	}
+	
+	stage('Execute sonarqube Report'){
+	 steps{
+	 sh "mvn sonar:sonar"
+	 }
+	}
+	
+	stage('Upload Artifacts into Nexus'){
+	 steps{
+	 sh "mvn deploy"
+	  }
+	 } 
+	 
+	 stage('Deploy App into Tomcatserver'){
+	 steps{
+	  sshagent(['17e58f74-0682-407d-82c8-033336934870']) {
+  sh "scp -o  StrictHostKeyChecking=no target/maven-web-application.war ec2-user@15.206.128.131:/opt/apache-tomcat-9.0.43/webapps/"
+        }
+	  }
+    }	
+    
+}
+
+post{
+	   
+	   success{
+	     mail  body: '''Build over...
+    regards,
+    priya''', replyTo: 'gandhalarsihitha57319@gmail.com', subject: 'Build over...succesfully', to: 'rishitharaji98@gmail.com'
+	   }
+	   
+	   failure{
+	     mail  body: '''Build failed...
+    regards,
+    priya''', replyTo: 'gandhalarsihitha57319@gmail.com', subject: 'Build over...failed', to: 'rishitharaji98@gmail.com'
+	   }
+	   
+	   always{
+	     mail body: '''Build over...
+    regards,
+    priya''', replyTo: 'gandhalarsihitha57319@gmail.com', subject: 'Build over...succesfully', to: 'rishitharaji98@gmail.com'
+	   
+	   }
+	  }
+	  
+}
