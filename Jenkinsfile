@@ -32,4 +32,11 @@ sshagent(['17e58f74-0682-407d-82c8-033336934870']) {
 }
 }
 
+ stage('Email notification')
+{
+emailext body: '''Build over...
+regards,
+priya''', replyTo: 'gandhalarsihitha57319@gmail.com', subject: 'Build over...', to: 'rishitharaji98@gmail.com'
+}
+   
 }
