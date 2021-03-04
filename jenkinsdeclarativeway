@@ -27,6 +27,7 @@ stages{
 	 }
 	}
 	
+	*/
 	stage('Execute sonarqube Report'){
 	 steps{
 	 sh "mvn sonar:sonar"
@@ -46,7 +47,7 @@ stages{
         }
 	  }
     }	
-    
+    /*
 }
 
 post{
