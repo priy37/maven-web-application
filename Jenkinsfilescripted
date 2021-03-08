@@ -1,4 +1,4 @@
-node
+node('nodes')
 {
     
 def mavenHome = tool name: "maven-3.6.3"
@@ -15,6 +15,7 @@ stage('Build')
 sh "${mavenHome}/bin/mvn clean package"
 }
 
+/*
 stage('Execute sonarqube report')
 {
 sh "${mavenHome}/bin/mvn sonar:sonar"
@@ -39,4 +40,5 @@ regards,
 priya''', replyTo: 'gandhalarsihitha57319@gmail.com', subject: 'Build over...', to: 'rishitharaji98@gmail.com'
 }
 
+*/
 }
